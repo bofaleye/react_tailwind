@@ -1,11 +1,11 @@
 stages:          # List of stages for jobs, and their order of execution
-  - sonar-checks
   - test
+  - sonar-checks
 
 # You can override the included template(s) by including variable overrides
 
 include:
-  - component: gitlab.com/raibove/deploy-react/deploy_react@1.0.1
+  # - component: gitlab.com/raibove/deploy-react/deploy_react@1.0.1
   - template: Security/SAST.gitlab-ci.yml
 # SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
 # Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/pipeline/#customization
