@@ -9,7 +9,7 @@ const Table =()=>{
        if(response?.data){
         setCustomerBillInfo(response?.data);
        }
-    },[])
+    },[accountNumber])
     return(<div>
         <h3>Customer Information</h3>
            <section>
