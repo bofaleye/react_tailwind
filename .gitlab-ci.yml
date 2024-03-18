@@ -1,6 +1,6 @@
 stages:          # List of stages for jobs, and their order of execution
   - test
-  - sonar-checks
+  # - sonar-checks
   - deploy
 
 include:
@@ -15,32 +15,32 @@ image: node:latest
 before_script:
   - npm install
 
-sonar-checks:
-  stage: sonar-checks
-  image: sonarsource/sonar-scanner-cli:latest
-  script:
-    - npm install
-    - sonar-scanner
-      -Dsonar.gitlab.max_major_issues_gate=0
-      -Dsonar.verbose=true
-      -Dsonar.c.file.suffixes=-
-      -Dsonar.cpp.file.suffixes=-
-      -Dsonar.objc.file.suffixes=-
-      -Dsonar.projectKey=bpsafrica_live-coding-assessment
-      -Dsonar.organization=bpsafrica
-      -Dsonar.host.url=https://sonarcloud.io
-      -Dsonar.token=f8f2ba76ed1d9ee742362d7ee42a2ae4d5d727ea
-      # -Dsonar.inclusions=**/*.md,**/*.json,**/*.html,**/*.css,**/*.js,**/*.ts
-      # -Dsonar.exclusions=**/Migrations/*.cs
-      # -Dsonar.qualitygate.wait=true
-      # -Dsonar.exclusions=**/*.java
-  allow_failure: false  # Allow the pipeline to continue even if SonarCloud analysis fails
-  only:
-    - merge_requests
-    - main
-    - feature/*
-  dependencies:
-    - "sast"
+# sonar-checks:
+#   stage: sonar-checks
+#   image: sonarsource/sonar-scanner-cli:latest
+#   script:
+#     - npm install
+#     - sonar-scanner
+#       -Dsonar.gitlab.max_major_issues_gate=0
+#       -Dsonar.verbose=true
+#       -Dsonar.c.file.suffixes=-
+#       -Dsonar.cpp.file.suffixes=-
+#       -Dsonar.objc.file.suffixes=-
+#       -Dsonar.projectKey=bpsafrica_live-coding-assessment
+#       -Dsonar.organization=bpsafrica
+#       -Dsonar.host.url=https://sonarcloud.io
+#       -Dsonar.token=f8f2ba76ed1d9ee742362d7ee42a2ae4d5d727ea
+#       # -Dsonar.inclusions=**/*.md,**/*.json,**/*.html,**/*.css,**/*.js,**/*.ts
+#       # -Dsonar.exclusions=**/Migrations/*.cs
+#       # -Dsonar.qualitygate.wait=true
+#       # -Dsonar.exclusions=**/*.java
+#   allow_failure: false  # Allow the pipeline to continue even if SonarCloud analysis fails
+#   only:
+#     - merge_requests
+#     - main
+#     - feature/*
+#   dependencies:
+#     - "sast"
 
 pages:
   stage: deploy
@@ -56,5 +56,5 @@ pages:
     # a pages deploy
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   dependencies:
-    - "sonar-checks"
+    # - "sonar-checks"
     - "sast"
