@@ -60,11 +60,11 @@ pages:
     
     - pwd
     - ls -lha $(pwd)
-    - ls -lha /public/
+    - ls -lha public/
 
     - echo "Checking. .. "
 
-    - rm -rf public
+    # - rm -rf public
     - cp build/index.html build/404.html
     - mv build public
   artifacts:
