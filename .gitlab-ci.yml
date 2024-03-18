@@ -47,13 +47,19 @@ pages:
   script:
     - npm install
     - npm run build
-    - rm -rf public
-    - cp build/index.html build/404.html
-    - mv build public
+
+    - echo "Checking. .. "
+    
     - pwd
     - ls -lha /
     - ls -lha /build/
     - ls -lha /public/
+
+    - echo "Checking. .. "
+
+    - rm -rf public
+    - cp build/index.html build/404.html
+    - mv build public
   artifacts:
     paths:
       # The folder that contains the files to be exposed at the Page URL
