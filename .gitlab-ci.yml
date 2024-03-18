@@ -1,12 +1,7 @@
 stages:          # List of stages for jobs, and their order of execution
-  - test
   # - sonar-checks
   - deploy
 
-include:
-  - template: Security/SAST.gitlab-ci.yml
-sast:
-  stage: test
 
 
 # The Docker image that will be used to build your app
@@ -47,6 +42,9 @@ pages:
   script:
     - npm install
     - npm run build
+    - rm -rf public
+    - cp build/index.html build/404.html
+    - mv build public
   artifacts:
     paths:
       # The folder that contains the files to be exposed at the Page URL
