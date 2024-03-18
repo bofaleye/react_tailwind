@@ -2,8 +2,17 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily : {
+        'Poppins': ['Poppins']
+      },
+      colors: {
+        'primary-bg': '#062D24',
+        'primary-cl': '#052D23',
+        'secondary-cl': '#052E24C2',
+      }
+    },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 }
 
