@@ -1,15 +1,13 @@
 import axios from 'axios';
 
 
-const BaseUrl = "https://bps-bm-staging.azurewebsites.net/api/"  //process.env.REACT_APP_BASE_URL;
+const Url = "https://mocki.io/v1/0be8ed02-30e2-4eee-94cc-8cf7dab0b7b4"  //process.env.REACT_APP_BASE_URL;
 
-export const fetchCustomerBill =(accountOrMeterNumber)=>{
-    let url = `${BaseUrl}customer/customerBillInfoRetrieval?accOrMeterNo=${accountOrMeterNumber}`
-    axios.get(url, {
-        headers : { Authorization:  'Bearer ef37ba73-5fd8-4cbb-ac4f-3481f3881938',}
-    }).then(response =>{
-        return response;
-    }).catch(error =>{
-        console.log(error);
-    })
-}
+export const fetchCustomerBill = async () => {
+    try {
+        const response = await axios.get(Url);
+        return response?.data;
+    } catch (error) {
+        throw error; // Re-throwing the error to propagate it to the calling component
+    }
+};

@@ -1,88 +1,259 @@
-import { useEffect, useState } from "react"
-import { fetchCustomerBill } from "../service/customerService"
+import { useEffect, useState } from "react";
+import { fetchCustomerBill } from "../service/customerService";
 
-const Table =()=>{
-    const [accountNumber, setAccountNumber] = useState('759539241');
-    const [customerBillInfo, setCustomerBillInfo] = useState(null);
+const Table = () => {
+  const [customerBillInfo, setCustomerBillInfo] = useState(null);
 
-    useEffect(()=>{
-       const response = fetchCustomerBill(accountNumber);
-       if(response?.data){
-        setCustomerBillInfo(response?.data);
-       }
-    },[accountNumber])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchCustomerBill();
+        setCustomerBillInfo(result?.data);
+      } catch (error) {}
+    };
 
-    return(<div>
-      <div>
-      <div className="px-4 sm:px-0">
-        <h3 className="text-base font-semibold leading-7 text-gray-900">Customer Billing Information</h3>
-        <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Personal details and application.</p>
-      </div>
-      <div className="mt-6 border-t border-gray-100">
-        <dl className="divide-y divide-gray-100">
-          <div className="px-1 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Current Outstanding balance</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">Margot Foster</dd>
+    fetchData();
+  }, []);
+
+  return (
+    <div className="container p-8">
+      <div className="mx-auto">
+        <div className="px-4 sm:px-0">
+          <h3 className="text-base font-semibold leading-7 text-white">
+            Customer Billing Information
+          </h3>
+          <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+            Customer billing info
+          </p>
+        </div>
+        <div className="flex flex-col md:flex-row  justify-center gap-y-[20px] md:gap-x-[20px]"> 
+        {customerBillInfo && (
+          <div className="card bg-white max-w-[600px]">
+            <div className="card-body">
+              <div className="card-title text-black"> Payment Details</div>
+              <div className="overflow-x-auto">
+                <table className="table">
+                  {/* head */}
+                  <tbody>
+                    {/* row 1 */}
+                    <tr>
+                      <td>Current Outstanding balance</td>
+                      <td>
+                        {
+                          customerBillInfo["Payment details"][
+                            "Current Outstanding balance"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    {/* row 2 */}
+                    <tr>
+                      <td>Last Payment Date</td>
+                      <td>
+                        {
+                          customerBillInfo["Payment details"][
+                            "Last Payment Date"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    {/* row 3 */}
+                    <tr>
+                      <td>Last Payment Amount</td>
+                      <td>
+                        {
+                          customerBillInfo["Payment details"][
+                            "Last Payment Amount"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SLT type</td>
+                      <td>{customerBillInfo["Payment details"]["SLT type"]}</td>
+                    </tr>
+                    <tr>
+                      <td>Contract Status</td>
+                      <td>
+                        {
+                          customerBillInfo["Payment details"][
+                            "Constract Status"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-          <div className="px-1 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Last Payment Date</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">Backend Developer</dd>
+        )}
+
+        {customerBillInfo && (
+          <div className="card bg-white max-w-[600px]">
+            <div className="card-body">
+              <div className="card-title text-black"> Last bill details</div>
+              <div className="overflow-x-auto">
+                <table className="table">
+                  <tbody>
+                    <tr>
+                      <td>Bill period</td>
+                      <td>
+                        {customerBillInfo["Last bill details"]["Bill period"]}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Consumption KWh</td>
+                      <td>
+                        {
+                          customerBillInfo["Last bill details"][
+                            "Consumption KWh"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Last avg daily consumption KWh</td>
+                      <td>
+                        {
+                          customerBillInfo["Last bill details"][
+                            "Last avg daily consumption KWh"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Total Bill this Month</td>
+                      <td>
+                        {
+                          customerBillInfo["Last bill details"][
+                            "Total Bill this Month"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Adjustment</td>
+                      <td>
+                        {customerBillInfo["Last bill details"]["Adjustment"]}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Payment this Month</td>
+                      <td>
+                        {
+                          customerBillInfo["Last bill details"][
+                            "Payment this Month"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Total Amount Payable</td>
+                      <td>
+                        {
+                          customerBillInfo["Last bill details"][
+                            "Total Amount Payable"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-          <div className="px-1 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Last Payment Amount</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">margotfoster@example.com</dd>
+        )}
+
+        {customerBillInfo && (
+          <div className="card bg-white max-w-[600px]">
+            <div className="card-body">
+              <div className="card-title text-black">
+                {" "}
+                Second to last bill details
+              </div>
+              <div className="overflow-x-auto">
+                <table className="table">
+                  <tbody>
+                    <tr>
+                      <td>Bill period</td>
+                      <td>
+                        {
+                          customerBillInfo["Second to last bill details"][
+                            "Bill period"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Consumption KWh</td>
+                      <td>
+                        {
+                          customerBillInfo["Second to last bill details"][
+                            "Consumption KWh"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Last avg daily consumption KWh</td>
+                      <td>
+                        {
+                          customerBillInfo["Second to last bill details"][
+                            "Last avg daily consumption KWh"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Total Bill this Month</td>
+                      <td>
+                        {
+                          customerBillInfo["Second to last bill details"][
+                            "Total Bill this Month"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Adjustment</td>
+                      <td>
+                        {
+                          customerBillInfo["Second to last bill details"][
+                            "Adjustment"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Payment this Month</td>
+                      <td>
+                        {
+                          customerBillInfo["Second to last bill details"][
+                            "Payment this Month"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Total Amount Payable</td>
+                      <td>
+                        {
+                          customerBillInfo["Second to last bill details"][
+                            "Total Amount Payable"
+                          ]
+                        }
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-          <div className="px-1 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">SLT type</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">$120,000</dd>
-          </div>
-          <div className="px-1 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Constract Status</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              Fugiat
-            </dd>
-          </div>
-          
-        </dl>
-        {/* Last bill details */}
-        <dl className="divide-y divide-gray-100">
-          <div className="px-1 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Bill period</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">Margot Foster</dd>
-          </div>
-          <div className="px-1 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Last Payment Date</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">Backend Developer</dd>
-          </div>
-          <div className="px-1 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Last Payment Amount</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">margotfoster@example.com</dd>
-          </div>
-          <div className="px-1 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">SLT type</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">$120,000</dd>
-          </div>
-          <div className="px-1 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">Constract Status</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              Fugiat
-            </dd>
-          </div>
-          
-        </dl>
+        )}
+        </div>
       </div>
     </div>
-        {/* <h3>Customer Information</h3>
-           <section>
-            <h4>Payment details</h4>
-            {customerBillInfo &&<div>
-                 <div>{customerBillInfo["Payment details"]["Current Outstanding balance"]}</div>
-                 <div>{customerBillInfo["Payment details"]["Last Payment Date"]}</div>
-                 <div>{customerBillInfo["Payment details"]["Last Payment Amount"]}</div>
-                 <div>{customerBillInfo["Payment details"]["SLT type"]}</div>
-                 <div>{customerBillInfo["Payment details"]["Constract Status"]}</div>
-              </div>}
-           </section> */}
-    </div>)
-}
-export default Table
+  );
+};
+export default Table;
