@@ -51,9 +51,9 @@ pages:
     - cp build/index.html build/404.html
     - mv build public
     - pwd
-    - ls /
-    - ls /build/
-    - ls /public/
+    - ls -lha /
+    - ls -lha /build/
+    - ls -lha /public/
   artifacts:
     paths:
       # The folder that contains the files to be exposed at the Page URL
