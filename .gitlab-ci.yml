@@ -1,7 +1,7 @@
 stages:          # List of stages for jobs, and their order of execution
   - test
   - sonar-checks
-  - pages
+  - deploy
 
 include:
   - template: Security/SAST.gitlab-ci.yml
@@ -32,6 +32,8 @@ sonar-checks:
     - merge_requests
     - main
     - feature/*
+  dependencies:
+    - "sast"
 
 
 # The Docker image that will be used to build your app
@@ -41,6 +43,7 @@ before_script:
   - npm install
 
 pages:
+  stage: deploy
   script:
     - react-scripts build
   artifacts:
@@ -51,3 +54,6 @@ pages:
     # This ensures that only pushes to the default branch will trigger
     # a pages deploy
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  dependencies:
+    - "sonar-checks"
+    - "sast"
