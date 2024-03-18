@@ -16,7 +16,6 @@ before_script:
   - whoami
   - npm install
   - pwd
-  - locate npm
   - echo ${PATH}
   - which npm
   - ls -lh $(which npm)
