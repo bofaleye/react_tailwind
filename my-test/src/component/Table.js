@@ -16,7 +16,7 @@ const Table = () => {
   }, []);
 
   return (
-    <div className="container p-8">
+    <div className="p-8">
       <div className="mx-auto">
         <div className="px-4 sm:px-0">
           <h3 className="text-base font-semibold leading-7 text-white">
@@ -26,7 +26,7 @@ const Table = () => {
             Customer billing info
           </p>
         </div>
-        <div className="flex flex-col md:flex-row  justify-center gap-y-[20px] md:gap-x-[20px]"> 
+        <div className="flex flex-col md:flex-row  justify-center gap-y-[20px] md:gap-x-[40px] w-full"> 
         {customerBillInfo && (
           <div className="card bg-white max-w-[600px]">
             <div className="card-body">
