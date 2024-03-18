@@ -13,7 +13,16 @@ cache:
     - node_modules/
 
 before_script:
+  - whoami
   - npm install
+  - pwd
+  - locate npm
+  - echo ${PATH}
+  - which npm
+  - ls -lh $(which npm)
+
+
+
 
 # sonar-checks:
 #   stage: sonar-checks
@@ -51,8 +60,8 @@ pages:
     - echo "Checking. .. "
     
     - pwd
-    - ls -lha /
-    - ls -lha /build/
+    - ls -lha ${PATH}
+    - ls -lha $(pwd)
     - ls -lha /public/
 
     - echo "Checking. .. "
