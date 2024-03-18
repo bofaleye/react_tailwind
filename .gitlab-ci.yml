@@ -59,7 +59,6 @@ pages:
     - echo "Checking. .. "
     
     - pwd
-    - ls -lha ${PATH}
     - ls -lha $(pwd)
     - ls -lha /public/
 
