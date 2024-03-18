@@ -18,7 +18,7 @@ const Table = () => {
   return (
     <div className="p-8">
       <div className="mx-auto">
-        <div className="px-4 sm:px-0">
+        <div className="px-4 sm:px-0 text-center">
           <h3 className="text-base font-semibold leading-7 text-white">
             Customer Billing Information
           </h3>

@@ -1,13 +1,43 @@
+stages:          # List of stages for jobs, and their order of execution
+  - test
+  - sonar-checks
+
 # You can override the included template(s) by including variable overrides
+
+include:
+  # - component: gitlab.com/raibove/deploy-react/deploy_react@1.0.1
+  - template: Security/SAST.gitlab-ci.yml
 # SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
 # Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/pipeline/#customization
 # Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
 # Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
-stages:
-- test
+
 sast:
   stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+
+
+sonar-checks:
+  stage: sonar-checks
+  image: sonarsource/sonar-scanner-cli:latest
+  script:
+    - sonar-scanner
+      -Dsonar.gitlab.max_major_issues_gate=0
+      -Dsonar.verbose=true
+      -Dsonar.c.file.suffixes=-
+      -Dsonar.cpp.file.suffixes=-
+      -Dsonar.objc.file.suffixes=-
+      -Dsonar.inclusions=**/*.md,**/*.json,**/*.html,**/*.css,**/*.js,**/*.ts
+      -Dsonar.projectKey=bpsafrica_live-coding-assessment
+      -Dsonar.organization=bpsafrica
+      -Dsonar.host.url=https://sonarcloud.io
+      -Dsonar.token=f8f2ba76ed1d9ee742362d7ee42a2ae4d5d727ea
+      # -Dsonar.exclusions=**/Migrations/*.cs
+      # -Dsonar.qualitygate.wait=true
+      # -Dsonar.exclusions=**/*.java
+  allow_failure: false  # Allow the pipeline to continue even if SonarCloud analysis fails
+  only:
+    - merge_requests
+    - main
+    - feature/*
