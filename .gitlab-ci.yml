@@ -7,6 +7,11 @@ stages:          # List of stages for jobs, and their order of execution
 # The Docker image that will be used to build your app
 image: node:latest
 # Functions that should be executed before the build script is run
+
+cache:
+  paths:
+    - node_modules/
+
 before_script:
   - npm install
 
@@ -53,6 +58,6 @@ pages:
     # This ensures that only pushes to the default branch will trigger
     # a pages deploy
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  dependencies:
-    # - "sonar-checks"
-    - "sast"
+  # dependencies:
+  #   # - "sonar-checks"
+  #   # - "sast"
