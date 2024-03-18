@@ -1,11 +1,48 @@
+stages:          # List of stages for jobs, and their order of execution
+  - test
+  - sonar-checks
+  - pages
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+sast:
+  stage: test
+
+
+sonar-checks:
+  stage: sonar-checks
+  image: sonarsource/sonar-scanner-cli:latest
+  script:
+    - sonar-scanner
+      -Dsonar.gitlab.max_major_issues_gate=0
+      -Dsonar.verbose=true
+      -Dsonar.c.file.suffixes=-
+      -Dsonar.cpp.file.suffixes=-
+      -Dsonar.objc.file.suffixes=-
+      -Dsonar.projectKey=bpsafrica_live-coding-assessment
+      -Dsonar.organization=bpsafrica
+      -Dsonar.host.url=https://sonarcloud.io
+      -Dsonar.token=f8f2ba76ed1d9ee742362d7ee42a2ae4d5d727ea
+      # -Dsonar.inclusions=**/*.md,**/*.json,**/*.html,**/*.css,**/*.js,**/*.ts
+      # -Dsonar.exclusions=**/Migrations/*.cs
+      # -Dsonar.qualitygate.wait=true
+      # -Dsonar.exclusions=**/*.java
+  allow_failure: false  # Allow the pipeline to continue even if SonarCloud analysis fails
+  only:
+    - merge_requests
+    - main
+    - feature/*
+
+
 # The Docker image that will be used to build your app
 image: node:lts
 # Functions that should be executed before the build script is run
 before_script:
   - npm install
+
 pages:
   script:
-    - npm run build
+    - react-scripts build
   artifacts:
     paths:
       # The folder that contains the files to be exposed at the Page URL
