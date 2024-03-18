@@ -9,10 +9,17 @@ sast:
   stage: test
 
 
+# The Docker image that will be used to build your app
+image: node:latest
+# Functions that should be executed before the build script is run
+before_script:
+  - npm install
+
 sonar-checks:
   stage: sonar-checks
   image: sonarsource/sonar-scanner-cli:latest
   script:
+    - npm install
     - sonar-scanner
       -Dsonar.gitlab.max_major_issues_gate=0
       -Dsonar.verbose=true
@@ -35,16 +42,10 @@ sonar-checks:
   dependencies:
     - "sast"
 
-
-# The Docker image that will be used to build your app
-image: node:latest
-# Functions that should be executed before the build script is run
-before_script:
-  - npm install
-
 pages:
   stage: deploy
   script:
+    - npm install
     - npm run build
   artifacts:
     paths:
