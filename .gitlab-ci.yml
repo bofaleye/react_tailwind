@@ -50,6 +50,10 @@ pages:
     - rm -rf public
     - cp build/index.html build/404.html
     - mv build public
+    - pwd
+    - ls /
+    - ls /build/
+    - ls /public/
   artifacts:
     paths:
       # The folder that contains the files to be exposed at the Page URL
