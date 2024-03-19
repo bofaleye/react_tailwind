@@ -1,43 +1,80 @@
 stages:          # List of stages for jobs, and their order of execution
-  - test
-  - sonar-checks
-
-# You can override the included template(s) by including variable overrides
-
-include:
-  # - component: gitlab.com/raibove/deploy-react/deploy_react@1.0.1
-  - template: Security/SAST.gitlab-ci.yml
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/pipeline/#customization
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
-
-sast:
-  stage: test
+  # - sonar-checks
+  - deploy
 
 
-sonar-checks:
-  stage: sonar-checks
-  image: sonarsource/sonar-scanner-cli:latest
+
+# The Docker image that will be used to build your app
+image: node:latest
+# Functions that should be executed before the build script is run
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - whoami
+  - npm install
+  - pwd
+  - echo ${PATH}
+  - which npm
+  - ls -lh $(which npm)
+
+
+
+
+# sonar-checks:
+#   stage: sonar-checks
+#   image: sonarsource/sonar-scanner-cli:latest
+#   script:
+#     - npm install
+#     - sonar-scanner
+#       -Dsonar.gitlab.max_major_issues_gate=0
+#       -Dsonar.verbose=true
+#       -Dsonar.c.file.suffixes=-
+#       -Dsonar.cpp.file.suffixes=-
+#       -Dsonar.objc.file.suffixes=-
+#       -Dsonar.projectKey=bpsafrica_live-coding-assessment
+#       -Dsonar.organization=bpsafrica
+#       -Dsonar.host.url=https://sonarcloud.io
+#       -Dsonar.token=f8f2ba76ed1d9ee742362d7ee42a2ae4d5d727ea
+#       # -Dsonar.inclusions=**/*.md,**/*.json,**/*.html,**/*.css,**/*.js,**/*.ts
+#       # -Dsonar.exclusions=**/Migrations/*.cs
+#       # -Dsonar.qualitygate.wait=true
+#       # -Dsonar.exclusions=**/*.java
+#   allow_failure: false  # Allow the pipeline to continue even if SonarCloud analysis fails
+#   only:
+#     - merge_requests
+#     - main
+#     - feature/*
+#   dependencies:
+#     - "sast"
+
+pages:
+  stage: deploy
   script:
-    - sonar-scanner
-      -Dsonar.gitlab.max_major_issues_gate=0
-      -Dsonar.verbose=true
-      -Dsonar.c.file.suffixes=-
-      -Dsonar.cpp.file.suffixes=-
-      -Dsonar.objc.file.suffixes=-
-      -Dsonar.inclusions=**/*.md,**/*.json,**/*.html,**/*.css,**/*.js,**/*.ts
-      -Dsonar.projectKey=bpsafrica_live-coding-assessment
-      -Dsonar.organization=bpsafrica
-      -Dsonar.host.url=https://sonarcloud.io
-      -Dsonar.token=f8f2ba76ed1d9ee742362d7ee42a2ae4d5d727ea
-      # -Dsonar.exclusions=**/Migrations/*.cs
-      # -Dsonar.qualitygate.wait=true
-      # -Dsonar.exclusions=**/*.java
-  allow_failure: false  # Allow the pipeline to continue even if SonarCloud analysis fails
-  only:
-    - merge_requests
-    - main
-    - feature/*
+    - npm install
+    - npm run build
+
+    - echo "Checking. .. "
+    
+    - pwd
+    - ls -lha $(pwd)
+    - ls -lha public/
+
+    - echo "Checking. .. "
+
+    # - rm -rf public
+    - cp build/index.html build/404.html
+    - mv build public
+  artifacts:
+    paths:
+      # The folder that contains the files to be exposed at the Page URL
+      - public
+  rules:
+    # This ensures that only pushes to the default branch will trigger
+    # a pages deploy
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  # dependencies:
+  #   # - "sonar-checks"
+  #   # - "sast"
